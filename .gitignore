@@ -1,0 +1,10 @@
+__pycache__
+dist/
+*.pyc
+.venv/
+.coverage
+coverage.xml
+page_loader/__pycache__
+page_loader/scripts/__pycache__
+.pytest_cache/
+*.log
