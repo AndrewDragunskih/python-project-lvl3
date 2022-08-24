@@ -1,8 +1,6 @@
 from urllib.parse import urlparse
 from page_loader.get_paths import get_resource_path
 from page_loader.get_paths import get_resource_dir_path
-from page_loader.get_paths import get_html_file_path
-from page_loader.save_data import save_data
 from bs4 import BeautifulSoup
 
 
@@ -25,5 +23,5 @@ def process_resources_paths(response_text, output_dir, url):
             resource_path = get_resource_path(
                 resource_dir_path, tag.get(asset['attr_name']),
             )
-            tag[asset['attr_name']] = resource_path 
+            tag[asset['attr_name']] = resource_path
     return soup.prettify()

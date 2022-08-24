@@ -4,11 +4,13 @@ from page_loader.app_logger import get_logger
 from page_loader.get_paths import get_resource_path
 from page_loader.get_paths import get_resource_dir_path
 from page_loader.save_data import save_data, make_dir
-from page_loader.page_loadr import KnownError
 from progress.bar import Bar
 from bs4 import BeautifulSoup
 import requests
-import sys
+
+
+class KnownError(Exception):
+    pass
 
 
 ASSETS = [

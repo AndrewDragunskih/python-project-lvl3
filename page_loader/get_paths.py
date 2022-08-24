@@ -7,7 +7,7 @@ def url_to_name(url):
     url, resource_type = os.path.splitext(url)
     while url not in ['https:', 'http:', '/', '', '//']:
         url, tail = os.path.split(url)
-        splitted_tail = re.split("\W|_", tail)
+        splitted_tail = re.split("_|\\W", tail)
         splitted_tail.reverse()
         url_parts.extend(splitted_tail)
     url_parts.reverse()

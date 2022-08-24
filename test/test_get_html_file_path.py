@@ -4,6 +4,7 @@ from page_loader.get_paths import get_html_file_path
 FIXTURE_DATA_PATH = 'test/fixtures/test_get_html_file_path.json'
 EXPECTED_DATA_PATH = 'test/fixtures/test_get_html_file_path_result'
 
+
 def test_get_file_path():
     with open(FIXTURE_DATA_PATH, 'r') as read_file:
         fixture_data = json.load(read_file)

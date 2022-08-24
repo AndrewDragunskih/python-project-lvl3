@@ -1,11 +1,10 @@
 import requests
-import sys
 from requests.exceptions import HTTPError
-from bs4 import BeautifulSoup
 from page_loader.app_logger import get_logger
 from page_loader.get_paths import get_html_file_path
 from page_loader.modify_html import process_resources_paths
 from page_loader.download_resources import download_resources
+from page_loader.save_data import save_data
 
 
 class KnownError(Exception):
