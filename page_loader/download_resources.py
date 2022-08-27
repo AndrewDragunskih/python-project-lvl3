@@ -20,6 +20,17 @@ ASSETS = [
 ]
 
 
+def make_resourse_url(attr, url):
+    if urlparse(attr).scheme == '':
+        return '{0}://{1}{2}{3}'.format(
+            urlparse(url).scheme,
+            urlparse(url).netloc,
+            '/' if attr[0] != '/' else '',
+            attr,
+        )
+    return attr
+
+
 def download_resources(response_text, output_dir, url):
     logger = get_logger(__name__)
     soup = BeautifulSoup(response_text, "html.parser")
@@ -29,18 +40,14 @@ def download_resources(response_text, output_dir, url):
     for asset in ASSETS:
         asset_tags = [
             tag for tag in soup.find_all(asset['tag_name'])
-            if urlparse(tag.get(asset['attr_name'])).scheme == ''
+            if urlparse(tag.get(asset['attr_name'])).scheme == '' or
+            urlparse(tag.get(asset['attr_name'])).netloc == urlparse(url).netloc
         ]
         asset_attrs = [tag.get(asset['attr_name']) for tag in asset_tags]
         all_attrs.extend(asset_attrs)
     with Bar('Processing', max=len(all_attrs)) as bar:
         for attr in all_attrs:
-            resource_url = '{0}://{1}{2}{3}'.format(
-                urlparse(url).scheme,
-                urlparse(url).netloc,
-                '/' if attr[0] != '/' else '',
-                attr,
-            )
+            resource_url = make_resourse_url(attr, url)
             try:
                 content = requests.get(resource_url)
                 content.raise_for_status()
