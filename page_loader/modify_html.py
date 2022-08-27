@@ -14,12 +14,16 @@ ASSETS = [
 def process_resources_paths(response_text, output_dir, url):
     soup = BeautifulSoup(response_text, "html.parser")
     resource_dir_path = get_resource_dir_path(output_dir, url)
+    all_attrs = []
     for asset in ASSETS:
-        filtred_tags = [
+        asset_tags = [
             tag for tag in soup.find_all(asset['tag_name'])
-            if urlparse(tag.get(asset['attr_name'])).scheme == ''
+            if urlparse(tag.get(asset['attr_name'])).scheme == '' or
+            urlparse(tag.get(asset['attr_name'])).netloc == urlparse(url).netloc
         ]
-        for tag in filtred_tags:
+        asset_attrs = [tag.get(asset['attr_name']) for tag in asset_tags]
+        all_attrs.extend(asset_attrs)
+        for tag in asset_tags:
             resource_path = get_resource_path(
                 resource_dir_path, tag.get(asset['attr_name']),
             )
