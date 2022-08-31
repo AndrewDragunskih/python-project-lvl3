@@ -1,10 +1,9 @@
-import requests
-from requests.exceptions import HTTPError
 from page_loader.app_logger import get_logger
-from page_loader.get_paths import get_html_file_path
-from page_loader.modify_html import process_resources_paths
+from page_loader.requests_module import make_request
+from page_loader.paths_module import get_html_file_path
+from page_loader.data_module import process_resources_paths
 from page_loader.download_resources import download_resources
-from page_loader.save_data import save_data
+from page_loader.fs_module import save_data
 
 
 class KnownError(Exception):
@@ -14,17 +13,7 @@ class KnownError(Exception):
 def download(url, output_dir):
     logger = get_logger(__name__)
     logger.info("Page loader is started")
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-    except HTTPError as http_err:
-        logger.error("HTTP error is occured: {0}".format(http_err))
-        raise KnownError() from http_err
-    except Exception as err:
-        logger.error("Other error is occured: {0}".format(err))
-        raise KnownError() from err
-    else:
-        logger.info("Request is seccessful to url: {0}".format(url))
+    response = make_request(url)
     logger.info("Start downloding page resources")
     download_resources(response.text, output_dir, url)
     logger.info("Page resources are downloaded seccessfuly")

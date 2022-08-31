@@ -1,9 +1,9 @@
 from urllib.parse import urlparse
 from requests.exceptions import HTTPError
 from page_loader.app_logger import get_logger
-from page_loader.get_paths import get_resource_path
-from page_loader.get_paths import get_resource_dir_path
-from page_loader.save_data import save_data, make_dir
+from page_loader.paths_module import get_resource_path, get_resource_dir_path
+from page_loader.data_module import get_tags_list, get_attr_name_from_tag
+from page_loader.fs_module import save_data, make_dir
 from progress.bar import Bar
 from bs4 import BeautifulSoup
 import requests
@@ -33,20 +33,13 @@ def make_resourse_url(attr, url):
 
 def download_resources(response_text, output_dir, url):
     logger = get_logger(__name__)
-    soup = BeautifulSoup(response_text, "html.parser")
+    #soup = BeautifulSoup(response_text, "html.parser")
     resource_dir_path = get_resource_dir_path(output_dir, url)
     make_dir(resource_dir_path)
-    all_attrs = []
-    for asset in ASSETS:
-        asset_tags = [
-            tag for tag in soup.find_all(asset['tag_name'])
-            if urlparse(tag.get(asset['attr_name'])).scheme == '' or
-            urlparse(tag.get(asset['attr_name'])).netloc == urlparse(url).netloc
-        ]
-        asset_attrs = [tag.get(asset['attr_name']) for tag in asset_tags]
-        all_attrs.extend(asset_attrs)
-    with Bar('Processing', max=len(all_attrs)) as bar:
-        for attr in all_attrs:
+    all_tags = get_tags_list(response_text, url)
+    with Bar('Processing', max=len(all_tags)) as bar:
+        for tag in all_tags:
+            attr = tag[get_attr_name_from_tag(tag)]
             resource_url = make_resourse_url(attr, url)
             try:
                 content = requests.get(resource_url)

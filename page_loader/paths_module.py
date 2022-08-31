@@ -31,8 +31,8 @@ def get_resource_dir_path(output_dir, url):
 
 
 def get_resource_path(resource_dir_path, attr_name):
-    image_name, resource_type = url_to_name(attr_name)
+    resource_name, resource_type = url_to_name(attr_name)
     return os.path.join(
         resource_dir_path,
-        '{0}{1}'.format(image_name, resource_type),
+        '{0}{1}'.format(resource_name, resource_type),
     )
