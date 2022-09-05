@@ -40,5 +40,6 @@ def process_resources_paths(response_text, output_dir, url):
             tag_name,
             {get_attr_name_from_tag(tag): tag[get_attr_name_from_tag(tag)]},
         )
+        print(resource_path)
         tag_to_change[get_attr_name_from_tag(tag)] = resource_path
     return soup.prettify()

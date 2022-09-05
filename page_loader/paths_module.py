@@ -34,11 +34,12 @@ def get_resource_dir_path(output_dir, url):
 def get_resource_path(resource_dir_path, url, attr):
     attr_path = urlparse(attr).path
     attr_name, attr_type = url_to_name(attr_path)
+    url_name, resource_type = url_to_name(url)
     if attr_type == '':
         attr_type = '.html'
     netloc_name, netloc_type = url_to_name(urlparse(url).netloc)
     return os.path.join(
-        resource_dir_path,
+        '{}_files'.format(url_name),
         '-'.join([
             netloc_name,
             netloc_type[1:],
