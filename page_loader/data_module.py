@@ -1,6 +1,7 @@
 from urllib.parse import urlparse
 from page_loader.paths_module import get_resource_path, get_resource_dir_path
 from bs4 import BeautifulSoup
+import os.path
 
 
 def get_tags_list(response_text, url):
@@ -41,5 +42,8 @@ def process_resources_paths(response_text, output_dir, url):
             {get_attr_name_from_tag(tag): tag[get_attr_name_from_tag(tag)]},
         )
         print(resource_path)
-        tag_to_change[get_attr_name_from_tag(tag)] = resource_path
+        tag_to_change[get_attr_name_from_tag(tag)] = os.path.relpath(
+            resource_path,
+            output_dir,
+        )
     return soup.prettify()
