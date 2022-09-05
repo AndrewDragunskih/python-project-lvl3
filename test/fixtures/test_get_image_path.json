@@ -1,4 +1,4 @@
 {
-  "/var/tmp": "/ru.hexlet.io/courses/file.jpg",
-  "/": "/ru.hexlet.io/tests.jpg"
+  "https://ru.hexlet.io/courses": "/assets/application.css",
+  "https://hexlet.io/tests": "/assets/professions/nodejs.png"
 }

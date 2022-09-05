@@ -1,5 +1,6 @@
 import os.path
 import re
+from urllib.parse import urlparse
 
 
 def url_to_name(url):
@@ -30,9 +31,17 @@ def get_resource_dir_path(output_dir, url):
     )
 
 
-def get_resource_path(resource_dir_path, attr_name):
-    resource_name, resource_type = url_to_name(attr_name)
+def get_resource_path(resource_dir_path, url, attr):
+    attr_path = urlparse(attr).path
+    attr_name, attr_type = url_to_name(attr_path)
+    if attr_type == '':
+        attr_type = '.html'
+    netloc_name, netloc_type = url_to_name(urlparse(url).netloc)
     return os.path.join(
         resource_dir_path,
-        '{0}{1}'.format(resource_name, resource_type),
+        '-'.join([
+            netloc_name,
+            netloc_type[1:],
+            '{0}{1}'.format(attr_name, attr_type)
+        ]),
     )

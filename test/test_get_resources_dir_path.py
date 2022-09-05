@@ -1,5 +1,5 @@
 import json
-from page_loader.get_paths import get_resource_dir_path
+from page_loader.paths_module import get_resource_dir_path
 
 FIXTURE_DATA_PATH = 'test/fixtures/test_get_resources_dir_path.json'
 EXPECTED_DATA_PATH = 'test/fixtures/test_get_resources_dir_path_result'
