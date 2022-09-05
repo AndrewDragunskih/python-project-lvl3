@@ -1,6 +1,7 @@
 """Some description."""
 import argparse
 import sys
+import os
 from page_loader.page_loader import download
 from page_loader.app_logger import get_logger
 
@@ -17,8 +18,12 @@ def main():
         prog='page-loader',
         description=dscr,
     )
-    parser.add_argument('--output')
     parser.add_argument('url_adress', nargs='?')
+    parser.add_argument(
+        '-o',
+        '--output',
+        default='{}/'.format(os.getcwd()),
+    )
     args = parser.parse_args()
     logger.info('Web page is saved to:\n{0}'.format(
         download(args.url_adress, args.output),
