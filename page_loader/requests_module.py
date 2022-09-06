@@ -14,10 +14,10 @@ def make_request(url):
         response = requests.get(url)
         response.raise_for_status()
     except HTTPError as http_err:
-        logger.error("HTTP error is occured: {0}".format(http_err))
+        logger.info("HTTP error is occured: {0}".format(http_err))
         raise KnownError() from http_err
     except Exception as err:
-        logger.error("Other error is occured: {0}".format(err))
+        logger.info("Other error is occured: {0}".format(err))
         raise KnownError() from err
     else:
         logger.info("Succesful!")
