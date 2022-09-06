@@ -37,11 +37,17 @@ def get_resource_path(resource_dir_path, url, attr):
     if attr_type == '':
         attr_type = '.html'
     netloc_name, netloc_type = url_to_name(urlparse(url).netloc)
-    return os.path.join(
-        resource_dir_path,
-        '-'.join([
+    if netloc_type == '':
+        resouce_name = '-'.join([
+            netloc_name,
+            '{0}{1}'.format(attr_name, attr_type)
+        ])
+    else:
+        resouce_name = '-'.join([
             netloc_name,
             netloc_type[1:],
             '{0}{1}'.format(attr_name, attr_type)
-        ]),
-    )
+        ])
+    print('name {}'.format(netloc_name))
+    print('type {}'.format(netloc_type))
+    return os.path.join(resource_dir_path, resouce_name)
