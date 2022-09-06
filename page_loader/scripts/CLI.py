@@ -3,7 +3,6 @@ import argparse
 import sys
 import os
 from page_loader.page_loader import download
-from page_loader.app_logger import get_logger
 
 
 class KnownError(Exception):
@@ -12,7 +11,6 @@ class KnownError(Exception):
 
 def main():
     """Run page loader."""
-    logger = get_logger(__name__)
     dscr = 'Download web page to any local directory'
     parser = argparse.ArgumentParser(
         prog='page-loader',
@@ -25,9 +23,11 @@ def main():
         default='{}/'.format(os.getcwd()),
     )
     args = parser.parse_args()
-    logger.info('Web page is saved to:\n{0}'.format(
-        download(args.url_adress, args.output),
-    ),)
+    print(
+        'Web page is saved to:\n{0}'.format(
+            download(args.url_adress, args.output),
+        ),
+    )
 
 
 if __name__ == '__main__':
