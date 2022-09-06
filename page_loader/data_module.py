@@ -13,10 +13,12 @@ def get_tags_list(response_text, url):
     soup = BeautifulSoup(response_text, "html.parser")
     all_tags = []
     for asset in ASSETS:
+        attr_name = asset['attr_name']
+        tag_name = asset['tag_name']
         all_tags.extend([
-            tag for tag in soup.find_all(asset['tag_name'])
-            if urlparse(tag.get(asset['attr_name'])).scheme == '' or
-            urlparse(tag.get(asset['attr_name'])).netloc == urlparse(url).netloc
+            tag for tag in soup.find_all(tag_name)
+            if (urlparse(tag.get(attr_name)).scheme == ''
+                or urlparse(tag.get(attr_name)).netloc == urlparse(url).netloc)
         ])
     return all_tags
 
