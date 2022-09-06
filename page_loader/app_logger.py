@@ -23,5 +23,4 @@ def get_logger(logger_name):
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.INFO)
     logger.addHandler(get_file_handler())
-    logger.addHandler(get_stream_handler())
     return logger
