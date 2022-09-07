@@ -48,6 +48,4 @@ def get_resource_path(resource_dir_path, url, attr):
             netloc_type[1:],
             '{0}{1}'.format(attr_name, attr_type)
         ])
-    print('name {}'.format(netloc_name))
-    print('type {}'.format(netloc_type))
     return os.path.join(resource_dir_path, resouce_name)
