@@ -4,25 +4,6 @@ from bs4 import BeautifulSoup
 import os.path
 
 
-def get_tags_list(response_text, url):
-    ASSETS = [
-        {'tag_name': 'img', 'attr_name': 'src'},
-        {'tag_name': 'link', 'attr_name': 'href'},
-        {'tag_name': 'script', 'attr_name': 'src'},
-    ]
-    soup = BeautifulSoup(response_text, "html.parser")
-    all_tags = []
-    for asset in ASSETS:
-        attr_name = asset['attr_name']
-        tag_name = asset['tag_name']
-        all_tags.extend([
-            tag for tag in soup.find_all(tag_name)
-            if (urlparse(tag.get(attr_name)).scheme == ''
-                or urlparse(tag.get(attr_name)).netloc == urlparse(url).netloc)
-        ])
-    return all_tags
-
-
 def get_attr_name_from_tag(tag):
     if tag.get('src') is not None:
         return 'src'
@@ -30,22 +11,33 @@ def get_attr_name_from_tag(tag):
         return 'href'
 
 
-def process_resources_paths(response_text, output_dir, url):
-    soup = BeautifulSoup(response_text, "html.parser")
-    resource_dir_path = get_resource_dir_path(output_dir, url)
-    all_tags = get_tags_list(response_text, url)
-    for tag in all_tags:
-        resource_path = get_resource_path(
-            resource_dir_path, url, tag[get_attr_name_from_tag(tag)],
-        )
-        tag_name = tag.name
-        tag_to_change = soup.find(
-            tag_name,
-            {get_attr_name_from_tag(tag): tag[get_attr_name_from_tag(tag)]},
-        )
-        print(resource_path)
-        tag_to_change[get_attr_name_from_tag(tag)] = os.path.relpath(
-            resource_path,
-            output_dir,
-        )
-    return soup.prettify()
+def get_tags_list(soup, url):
+    all_tags = []
+    for tag in soup.find_all(['img', 'link', 'script']):
+        attr_name = get_attr_name_from_tag(tag)
+        if (urlparse(tag.get(attr_name)).scheme == ''
+                or urlparse(tag.get(attr_name)).netloc == urlparse(url).netloc):
+            all_tags.append(tag)
+    return all_tags
+
+
+def process_html(response, output_dir, url):
+    soup = BeautifulSoup(response, "html.parser")
+    all_tags = get_tags_list(soup, url)
+    if all_tags != []:
+        resource_dir_path = get_resource_dir_path(output_dir, url)
+        for tag in all_tags:
+            tag_name = tag.name
+            tag_attr_name = get_attr_name_from_tag(tag)
+            tag_attr_value = tag[tag_attr_name]
+            resource_path = get_resource_path(
+                resource_dir_path, url, tag_attr_value,
+            )
+            tag_to_change = soup.find(
+                tag_name, {tag_attr_name: tag_attr_value},
+            )
+            tag_to_change[tag_attr_name] = os.path.relpath(
+                resource_path,
+                output_dir,
+            )
+    return all_tags, soup.prettify()

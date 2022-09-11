@@ -7,11 +7,11 @@ class KnownError(Exception):
     pass
 
 
-def make_request(url):
+def make_request(url, client=requests):
     logger = get_logger(__name__)
     logger.info("Getting data...")
     try:
-        response = requests.get(url)
+        response = client.get(url)
         response.raise_for_status()
     except HTTPError as http_err:
         logger.info("HTTP error is occured: {0}".format(http_err))
@@ -21,4 +21,4 @@ def make_request(url):
         raise KnownError() from err
     else:
         logger.info("Succesful!")
-    return response
+    return response.text

@@ -15,7 +15,7 @@ bs4 = "^0.0.1"
 progress = "^1.6"
 
 [tool.poetry.scripts]
-page-loader = "page_loader.scripts.CLI:main"
+page-loader = "page_loader.scripts.loader:main"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"

@@ -1,12 +1,7 @@
-"""Some description."""
 import argparse
 import sys
 import os
-from page_loader.page_loader import download
-
-
-class KnownError(Exception):
-    pass
+from page_loader.page_loader import download, KnownError
 
 
 def main():
@@ -23,16 +18,13 @@ def main():
         default='{}/'.format(os.getcwd()),
     )
     args = parser.parse_args()
-    print(
-        'Web page is saved to:\n{0}'.format(
-            download(args.url_adress, args.output),
-        ),
-    )
-
-
-if __name__ == '__main__':
     try:
-        main()
+        html_file_path = download(args.url_adress, args.output)
+        print('Web page is saved to:\n{0}'.format(html_file_path))
         sys.exit()
     except KnownError:
         sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()
