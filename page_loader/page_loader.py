@@ -17,7 +17,7 @@ def download(url, output_dir):
     logger.info("Start creating html file")
     all_tags, soup = process_html(response, output_dir, url)
     html_file_path = get_html_file_path(output_dir, url)
-    save_data(html_file_path, soup.prettify())
+    save_data(html_file_path, soup)
     logger.info("Html file is saved to: {0}".format(html_file_path))
     logger.info("Start downloding page resources")
     download_resources(all_tags, output_dir, url)
