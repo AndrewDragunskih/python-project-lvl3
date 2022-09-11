@@ -15,8 +15,10 @@ def get_tags_list(soup, url):
     all_tags = []
     for tag in soup.find_all(['img', 'link', 'script']):
         attr_name = get_attr_name_from_tag(tag)
-        if (urlparse(tag.get(attr_name)).scheme == ''
-                or urlparse(tag.get(attr_name)).netloc == urlparse(url).netloc):
+        attr_value = tag.get(attr_name)
+        attr_scheme = urlparse(attr_value).scheme
+        attr_netloc = urlparse(attr_value).netloc
+        if (attr_scheme == ''or attr_netloc == urlparse(url).netloc):
             all_tags.append(tag)
     return all_tags
 
