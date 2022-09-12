@@ -15,11 +15,11 @@ def download(url, output_dir):
     logger.info("Page loader is started")
     response = make_request(url)
     logger.info("Start creating html file")
-    all_tags, soup = process_html(response, output_dir, url)
+    all_attr_values, soup = process_html(response, output_dir, url)
     html_file_path = get_html_file_path(output_dir, url)
     save_data(html_file_path, soup)
     logger.info("Html file is saved to: {0}".format(html_file_path))
     logger.info("Start downloding page resources")
-    download_resources(all_tags, output_dir, url)
+    download_resources(all_attr_values, output_dir, url)
     logger.info("Page resources are downloaded seccessfuly")
     return html_file_path
