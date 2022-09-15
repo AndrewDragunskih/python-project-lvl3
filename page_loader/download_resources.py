@@ -1,43 +1,29 @@
 from urllib.parse import urlparse
-from requests.exceptions import HTTPError
-from page_loader.app_logger import get_logger
-from page_loader.paths_module import get_resource_path, get_resource_dir_path
+from page_loader.paths_module import get_resource_dir_path
 from page_loader.fs_module import save_data, make_dir
+from page_loader.requests_module import get_page_content
 from progress.bar import Bar
-import requests
 
 
-class KnownError(Exception):
-    pass
-
-
-def make_resourse_url(attr, url):
-    if urlparse(attr).scheme == '':
+def format_resource_url(resource_url, url):
+    if urlparse(resource_url).scheme == '':
         return '{0}://{1}{2}{3}'.format(
             urlparse(url).scheme,
             urlparse(url).netloc,
-            '/' if attr[0] != '/' else '',
-            attr,
+            '/' if resource_url[0] != '/' else '',
+            resource_url,
         )
-    return attr
+    return resource_url
 
 
-def download_resources(all_attr_values, output_dir, url):
-    logger = get_logger(__name__)
+def download_resources(page_resources_data, output_dir, url):
     resource_dir_path = get_resource_dir_path(output_dir, url)
-    if all_attr_values != []:
-        make_dir(resource_dir_path)
-        with Bar('Processing', max=len(all_attr_values)) as bar:
-            for value in all_attr_values:
-                resource_url = make_resourse_url(value, url)
-                try:
-                    content = requests.get(resource_url)
-                    content.raise_for_status()
-                except HTTPError as http_err:
-                    logger.error("HTTP error is occured: {0}".format(http_err))
-                except Exception as err:
-                    logger.error("Other error is occured: {0}".format(err))
-                    raise KnownError() from err
-                resource_path = get_resource_path(resource_dir_path, url, value)
-                save_data(resource_path, content.content, access_mode='wb')
-                bar.next()
+    if not page_resources_data:
+        return None
+    make_dir(resource_dir_path)
+    with Bar('Processing', max=len(page_resources_data)) as bar:
+        for resouce_data in page_resources_data:
+            resource_url = format_resource_url(resouce_data['value'], url)
+            resource = get_page_content(resource_url)
+            save_data(resouce_data['path'], resource, access_mode='wb')
+            bar.next()

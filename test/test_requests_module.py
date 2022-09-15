@@ -1,4 +1,4 @@
-from page_loader.requests_module import make_request
+from page_loader.requests_module import get_page_text
 import pytest
 
 
@@ -28,7 +28,7 @@ class FakeClient:
 def test_make_request_right_url():
     url = 'https://ru.hexlet.io/'
     fake_client = FakeClient()
-    result = make_request(url, fake_client)
+    result = get_page_text(url, fake_client)
     expected_data = 'Right url'
     assert result == expected_data
 
@@ -37,4 +37,4 @@ def test_make_request_wrong_url():
     url = 'https://ru.hexlet.ru/'
     fake_client = FakeClient()
     with pytest.raises(Exception):
-        make_request(url, fake_client)
+        get_page_text(url, fake_client)

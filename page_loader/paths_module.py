@@ -31,21 +31,21 @@ def get_resource_dir_path(output_dir, url):
     )
 
 
-def get_resource_path(resource_dir_path, url, attr):
-    attr_path = urlparse(attr).path
-    attr_name, attr_type = url_to_name(attr_path)
-    if attr_type == '':
-        attr_type = '.html'
+def get_resource_path(resource_dir_path, url, resource_url):
+    resource_url_path = urlparse(resource_url).path
+    resource_url_name, resource_url_type = url_to_name(resource_url_path)
+    if resource_url_type == '':
+        resource_url_type = '.html'
     netloc_name, netloc_type = url_to_name(urlparse(url).netloc)
     if netloc_type == '':
         resouce_name = '-'.join([
             netloc_name,
-            '{0}{1}'.format(attr_name, attr_type)
+            '{0}{1}'.format(resource_url_name, resource_url_type)
         ])
     else:
         resouce_name = '-'.join([
             netloc_name,
             netloc_type[1:],
-            '{0}{1}'.format(attr_name, attr_type)
+            '{0}{1}'.format(resource_url_name, resource_url_type)
         ])
     return os.path.join(resource_dir_path, resouce_name)
