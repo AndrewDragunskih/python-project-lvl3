@@ -1,10 +1,7 @@
 import requests
 from requests.exceptions import HTTPError
+from page_loader.exc import KnownError
 from page_loader.app_logger import get_logger
-
-
-class KnownError(Exception):
-    pass
 
 
 def get_page_response(url, client=requests):

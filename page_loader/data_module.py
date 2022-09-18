@@ -15,7 +15,7 @@ def process_page_data(page_text_data, output_dir, url):
     resource_dir_path = get_resource_dir_path(output_dir, url)
     parced_page_text_data = BeautifulSoup(page_text_data, "html.parser")
     page_resources_data = []
-    for tag in parced_page_text_data.find_all(['img', 'link', 'script']):
+    for tag in parced_page_text_data.find_all(ASSETS.keys()):
         tag_attribute_name = ASSETS[tag.name]
         tag_attribute_value = tag.get(tag_attribute_name)
         tag_attribute_value_scheme = urlparse(tag_attribute_value).scheme

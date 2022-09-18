@@ -1,9 +1,6 @@
 from page_loader.app_logger import get_logger
+from page_loader.exc import KnownError
 import os
-
-
-class KnownError(Exception):
-    pass
 
 
 def save_data(path, data_to_save, access_mode='w'):
